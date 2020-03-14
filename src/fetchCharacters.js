@@ -1,18 +1,22 @@
 import { ActionTypes } from './fetchReducer';
 
-const fetchCharacters = (dispatch, endpoint, formatData) => {
+const fetchCharacters = (
+  dispatch,
+  endpoint,
+  formatData,
+  type = ActionTypes.RESPONSE_COMPLETE,
+) => {
   dispatch({ type: ActionTypes.FETCHING });
 
   fetch(endpoint)
     .then(response => response.json())
     .then(data => {
       dispatch({
-        type: ActionTypes.RESPONSE_COMPLETE,
+        type,
         payload: formatData(data),
       });
     })
     .catch(exc => {
-      console.error(exc.message);
       dispatch({ type: ActionTypes.ERROR, payload: exc.message });
     });
 };

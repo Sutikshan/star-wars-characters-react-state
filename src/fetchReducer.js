@@ -1,6 +1,7 @@
 export const ActionTypes = {
   FETCHING: 'FETCHING',
   RESPONSE_COMPLETE: 'RESPONSE_COMPLETE',
+  CHARACTER_RESPONSE_COMPLETE: 'CHARACTER_RESPONSE_COMPLETE',
   ERROR: 'ERROR',
 };
 
@@ -32,6 +33,15 @@ export const fetchReducer = (state, action) => {
       loading: false,
       error: action.payload,
       characters: [],
+    };
+  }
+
+  if (action.type === ActionTypes.CHARACTER_RESPONSE_COMPLETE) {
+    return {
+      ...state,
+      loading: false,
+      error: null,
+      character: action.payload,
     };
   }
 

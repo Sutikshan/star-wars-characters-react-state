@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import fetchReducer, { initialState } from './fetchReducer';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import endpoint from './endpoint';
 import useThunkReducer from './useThunkReducer';
 import CharacterList from './CharacterList';
 import fetchCharacters from './fetchCharacters';
+import CharacterView from './CharacterView';
 import './styles.scss';
 
 const formatCharactersData = data => Object.values(data.characters);
@@ -34,6 +35,9 @@ const Application = () => {
             <CharacterList characters={characters} />
           )}
           {error && <p className="error">{error.message}</p>}
+        </section>
+        <section className="CharacterView">
+          <Route path="/characters/:id" component={CharacterView} />
         </section>
       </main>
     </div>

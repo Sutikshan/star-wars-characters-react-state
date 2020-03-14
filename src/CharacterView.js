@@ -1,7 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import useThunkReducer from './useThunkReducer';
+import fetchCharacters from './fetchCharacters';
+import fetchReducer, { initialState, ActionTypes } from './fetchReducer';
+import endpoint from './endpoint';
 
-const CharacterView = ({ character = {} }) => {
-  console.log(character);
+const formatCharacterData = data => data.character;
+
+const CharacterView = ({ match }) => {
+  const characterId = match && match.params && match.params.id;
+  const [state, dispatch] = useThunkReducer(fetchReducer, initialState);
+
+  useEffect(() => {
+    if (!characterId) {
+      return;
+    }
+
+    dispatch(dispatch =>
+      fetchCharacters(
+        dispatch,
+        `${endpoint}/characters/${characterId}`,
+        formatCharacterData,
+        ActionTypes.CHARACTER_RESPONSE_COMPLETE,
+      ),
+    );
+  }, [dispatch, characterId]);
+  const { character } = state;
+
+  if (!character) {
+    return null;
+  }
+
   return (
     <section className="CharacterView">
       <h2>{character.name}</h2>

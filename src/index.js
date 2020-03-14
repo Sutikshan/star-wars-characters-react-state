@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import useFetch from './useFetch';
+import fetchReducer, { initialState } from './fetchReducer';
 import { BrowserRouter as Router } from 'react-router-dom';
 import endpoint from './endpoint';
-
+import useThunkReducer from './useThunkReducer';
 import CharacterList from './CharacterList';
-
+import fetchCharacters from './fetchCharacters';
 import './styles.scss';
 
 const formatCharactersData = data => Object.values(data.characters);
 
 const Application = () => {
-  const [loading, error, characters] = useFetch(
-    `${endpoint}/characters`,
-    formatCharactersData,
-  );
+  const [state, dispatch] = useThunkReducer(fetchReducer, initialState);
+
+  useEffect(() => {
+    dispatch(dispatch =>
+      fetchCharacters(dispatch, `${endpoint}/characters`, formatCharactersData),
+    );
+  }, [dispatch]);
+
+  const { loading, error, characters } = state;
 
   return (
     <div className="Application">

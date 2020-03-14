@@ -37,3 +37,5 @@ export const fetchReducer = (state, action) => {
 
   return state;
 };
+
+export default fetchReducer;
